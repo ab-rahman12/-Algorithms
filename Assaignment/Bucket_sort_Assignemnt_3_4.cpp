@@ -1,0 +1,73 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+// Insertion sort function to sort individual buckets
+void insertionSort(vector<float>& bucket)
+{
+    for (int i = 1; i < bucket.size(); ++i) {
+        float key = bucket[i];
+        int j = i - 1;
+
+        // Shift elements greater than key to one position ahead
+        while (j >= 0 && bucket[j] > key)
+        {
+            bucket[j + 1] = bucket[j];
+            j--;
+        }
+        bucket[j + 1] = key; // Place key at correct position
+    }
+}
+
+// Function to sort arr[] of size n using bucket sort
+void bucketSort(float arr[], int n)
+{
+    // 1) Create n empty buckets (each bucket is a vector of float)
+    vector<float> b[n];
+
+    // 2) Put array elements in different buckets
+    //    Bucket index = n * value (assuming values are in [0,1))
+    for (int i = 0; i < n; i++)
+    {
+        int bi = n * arr[i];   // Index for bucket
+        b[bi].push_back(arr[i]);
+    }
+
+    // 3) Sort individual buckets using insertion sort
+    for (int i = 0; i < n; i++)
+    {
+        insertionSort(b[i]);
+    }
+
+    // 4) Concatenate all sorted buckets into arr[]
+    int index = 0;
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < b[i].size(); j++)
+        {
+            arr[index++] = b[i][j];
+        }
+    }
+
+}
+
+int main()
+{
+
+    int n;
+    cout << "Enter size of array: ";
+    cin >> n;
+
+    float arr[n];
+    cout << "Enter the float elements of the array : ";
+    for (int i = 0; i < n; i++) cin >> arr[i];
+
+    //cal the function to sort the array
+    bucketSort(arr, n);
+
+    cout << "Sorted array is \n";
+    for (int i = 0; i < n; i++) cout << arr[i] << " ";
+    cout << endl;
+
+    return 0;
+
+}
